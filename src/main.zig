@@ -107,20 +107,20 @@ pub fn createBif(arg: BifCreationArguments) !void {
         // isVoD
           1,
     };
+    const img_info = try image_parsing.parseImageInfo("./input-tests/Tears_of_Steel_1080p_0001.jpg");
+
+    const format_str: *const [4:0]u8 = switch (img_info.format) {
+        .Jpeg => "jpeg",
+        .Png => "png ", // TODO: Is it "png ", " png", something else?
+    };
     comptime var current_offset = 13;
 
     writeInt(u32, num_files, header_buf[current_offset .. current_offset + 4]); // set number of files
     current_offset += 4;
     writeInt(u32, 16, header_buf[current_offset .. current_offset + 4]); // set framewise separation
     current_offset += 4;
-    writeStr("jpeg", header_buf[current_offset .. current_offset + 4]); // set format
+    @memcpy(header_buf[current_offset .. current_offset + 4], format_str); // Set format
     current_offset += 4;
-
-    _ = try image_parsing.parseImageInfo("./input-tests/Tears_of_Steel_1080p_0001.jpg");
-
-    // @memcpy(header_buf[21..25], "jpeg"); // Set format
-
-    // writeStr(4, header_buf[21..25], "jpeg"); // set framewise separatin
 
     // writeU32ToBuf(header_buf[13..17], num_files); // set number of files
     // writeU32ToBuf(header_buf[17..21], 16); // set framewise separation
@@ -159,13 +159,6 @@ fn writeInt(
     } else if (T == []const u8) {} else {
         comptime unreachable;
     }
-}
-
-fn writeStr(
-    comptime str: []const u8,
-    buffer: *[str.len]u8,
-) void {
-    @memcpy(buffer, str); // Set format
 }
 
 fn logSizeOf(comptime T: type) void {
