@@ -152,7 +152,7 @@ pub fn createBif(arg: BifCreationArguments) !void {
 fn writeInt(
     comptime T: type,
     value: T,
-    buffer: *[@divExact(@typeInfo(T).Int.bits, 8)]u8,
+    buffer: *[@divExact(@typeInfo(T).int.bits, 8)]u8,
 ) void {
     if (T == u64 or T == u32 or T == u16 or T == u8) {
         std.mem.writeInt(T, buffer, value, .big);

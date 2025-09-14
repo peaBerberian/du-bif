@@ -1,6 +1,7 @@
 .{
-    .name = "du-bif",
+    .name = .du_bif,
     .version = "0.1.0",
+    .fingerprint = 0xdb4697695a12fd95,
     .paths = .{
         "build.zig",
         "build.zig.zon",
